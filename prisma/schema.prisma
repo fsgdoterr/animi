@@ -1,0 +1,172 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserPermissions {
+  USER
+  MODER
+  ADMIN
+}
+
+enum AnimeType {
+  TV
+  MOVIE
+  OVA
+  ONA
+}
+
+model User {
+  id           Int @id @default(autoincrement())
+  email        String @unique
+  username     String @unique
+  password     String
+  permissions  UserPermissions @default(USER)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  animes       Anime[]
+  genres       Genre[]
+  images       Image[]
+  ratings      AnimeRating[]
+}
+
+model Anime {
+  id             Int @id @default(autoincrement())
+
+  title          String
+  originalTitle  String?
+  engTitle       String?
+  description    String
+  releaseDate    Int
+  episodesTotal  Int
+  type           AnimeType
+
+  studio         String?
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  userId         Int
+  user           User @relation(fields: [userId], references: [id])
+
+  genres         AnimeGenre[]
+
+  posterImageId  Int?
+  posterImage    Image? @relation(fields: [posterImageId], references: [id])
+
+  animeImages    AnimeImage[]
+
+  views          AnimeView[]
+  ratings        AnimeRating[]
+  codes          AnimeCode[]
+}
+
+model AnimeGenre {
+  animeId    Int
+  genreId    Int
+
+  anime      Anime @relation(fields: [animeId], references: [id])
+  genre      Genre @relation(fields: [genreId], references: [id])
+
+  @@id([animeId, genreId])
+}
+
+model Genre {
+  id             Int @id @default(autoincrement())
+  name           String @unique
+    
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+    
+  userId         Int
+  user           User @relation(fields: [userId], references: [id])
+
+  animes         AnimeGenre[]
+
+  posterImageId  Int?
+  posterImage    Image? @relation(fields: [posterImageId], references: [id])
+}
+
+model AnimeImage {
+  animeId    Int
+  imageId    Int
+
+  anime      Anime @relation(fields: [animeId], references: [id])
+  image      Image @relation(fields: [imageId], references: [id])
+
+  @@id([animeId, imageId])
+}
+
+model Image {
+  id           Int @id @default(autoincrement())
+  path         String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  userId       Int
+  user         User @relation(fields: [userId], references: [id])
+
+  animePoster  Anime[]
+  animeImages  AnimeImage[]
+
+  genrePoster  Genre[]
+}
+
+model AnimeView {
+  id         Int @id @default(autoincrement())
+  animeId    Int
+  createdAt  DateTime @default(now())
+
+  anime      Anime @relation(fields: [animeId], references: [id])
+
+  userAgent String?
+  referer   String?
+  ip        String?
+}
+
+model AnimeRating {
+  id         Int @id @default(autoincrement())
+  animeId    Int
+  userId     Int
+  rating     Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  anime      Anime @relation(fields: [animeId], references: [id])
+  user       User @relation(fields: [userId], references: [id])
+
+  @@unique([animeId, userId])
+}
+
+model AnimeCode {
+  id         Int @id @default(autoincrement())
+  animeId    Int
+  code       String @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  anime      Anime @relation(fields: [animeId], references: [id])
+  views      AnimeCodeView[]
+}
+
+model AnimeCodeView {
+  id           Int @id @default(autoincrement())
+  animeCodeId  Int
+  createdAt    DateTime @default(now())
+
+  animeCode    AnimeCode @relation(fields: [animeCodeId], references: [id])
+
+  userAgent    String?
+  referer      String?
+  ip           String?
+}
