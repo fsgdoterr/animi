@@ -30,7 +30,7 @@ model User {
   email        String @unique
   username     String @unique
   password     String
-  permissions  UserPermissions @default(USER)
+  permissions  UserPermissions[] @default([USER])
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
