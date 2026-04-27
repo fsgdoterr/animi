@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Providers from "@/components/providers/providers";
+import { inter } from "@/lib/frontend/utils/fonts";
+import Sidebar from "@/components/sidebar";
 
 export const metadata: Metadata = {
     title: "Create Next App",
@@ -15,8 +18,18 @@ export default function RootLayout({
         <html
             lang="en"
             className="h-full antialiased"
+            suppressHydrationWarning
         >
-            <body className="">{children}</body>
+            <body className={`${inter.className} bg-gradient`}>
+                <Providers>
+                    <div className="h-screen flex">
+                        <Sidebar />
+                        <main className="flex-1">
+                            {children}
+                        </main>
+                    </div>
+                </Providers>
+            </body>
         </html>
     );
 }

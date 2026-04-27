@@ -1,1 +1,52 @@
 @import "tailwindcss";
+
+@theme {
+    --flame-1: #F26542;
+    --flame-2: #f1542c;
+    --flame-3: #f34115;
+}
+
+[data-theme="light"] {
+    --bg-1: #fff;
+    --bg-2: #F7F6FD;
+    --bg-3: #EDEAF4;
+
+    --text-1: #000;
+    --text-2: #121927;
+
+}
+
+[data-theme="dark"] {
+    --bg-1: #232224;
+    --bg-2: #3b393d;
+    --bg-3: #656a75;
+
+    --text-1: #fff;
+    --text-2: #B5BEC8;
+}
+
+* {
+    @apply duration-200 transition-all;
+}
+
+html,
+body,
+button,
+a,
+input,
+textarea,
+select,
+svg,
+path {
+    transition-property: color, background-color, border-color, fill, stroke !important;
+    transition-duration: 200ms !important;
+    transition-timing-function: ease !important;
+}
+
+[data-theme="dark"] .bg-gradient {
+    @apply bg-gradient-to-b from-[#19191A] to-[#1A181B];
+}
+
+[data-theme="light"] .bg-gradient {
+    @apply bg-gradient-to-b from-[#f7f7f7] to-[#e5e4ec];
+}
