@@ -20,7 +20,7 @@ export default function RootLayout({
             className="h-full antialiased"
             suppressHydrationWarning
         >
-            <body className={`${inter.className} bg-gradient`}>
+            <body className={`${inter.className} bg-gradient text-(--text-1)`}>
                 <Providers>
                     <div className="h-screen flex">
                         <Sidebar />

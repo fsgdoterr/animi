@@ -1,14 +1,13 @@
-import { ThemeProvider } from "next-themes";
+import StoreProvider from "@/components/providers/store-provider";
+import ThemeProvider from "@/components/providers/theme-provider";
 import { PropsWithChildren } from "react";
 
 export default function Providers({children}: PropsWithChildren) {
     return(
-        <ThemeProvider
-            attribute="data-theme"
-            defaultTheme="dark"
-            enableSystem={false}
-        >
-            {children}
+        <ThemeProvider>
+            <StoreProvider>
+                {children}
+            </StoreProvider>
         </ThemeProvider>
     );
 }

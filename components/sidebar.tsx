@@ -1,3 +1,4 @@
+import AccountButton from "@/components/account-button";
 import Navbar from "@/components/navbar";
 import ChangeTheme from "@/components/ui/change-theme";
 import Input from "@/components/ui/input";
@@ -18,6 +19,8 @@ export default function Sidebar() {
                 icon={<Search />}
             />
             <Navbar />
+            <div className="flex-1"></div>
+            <AccountButton />
         </div>
     );
 }
