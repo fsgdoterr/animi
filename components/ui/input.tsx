@@ -14,8 +14,8 @@ interface Props extends Omit<
     icon?: ReactNode;
     rightSlot?: ReactNode;
 
-    className?: string; // стили контейнера input
-    rootClassName?: string; // стили общего wrapper
+    className?: string;
+    rootClassName?: string;
     inputClassName?: string;
     labelClassName?: string;
     errorClassName?: string;
@@ -51,7 +51,9 @@ const Input = forwardRef<HTMLInputElement, Props>(
         const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
         const inputId = id ?? name;
-        const errorId = error && inputId ? `${inputId}-error` : undefined;
+        const hasError = Boolean(error);
+        const shouldShowErrorText = hasError && typeof error !== "boolean";
+        const errorId = shouldShowErrorText && inputId ? `${inputId}-error` : undefined;
 
         const isPassword = type === "password";
         const shouldShowPasswordToggle = isPassword && showPasswordToggle;
@@ -78,7 +80,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
                         "relative flex items-center gap-2 rounded-xl border border-(--bg-3) bg-(--bg-2) px-3 py-2 text-sm text-(--text-1)",
                         "focus-within:border-(--accent-flame-1)",
                         disabled && "cursor-not-allowed opacity-60",
-                        error && "border-red-500 focus-within:border-red-500",
+                        hasError && "border-red-500 focus-within:border-red-500",
                         className,
                     )}
                 >
@@ -94,7 +96,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
                         name={name}
                         type={currentType}
                         disabled={disabled}
-                        aria-invalid={!!error}
+                        aria-invalid={hasError}
                         aria-describedby={errorId}
                         className={cn(
                             "min-w-0 flex-1 bg-transparent outline-none placeholder:text-gray-500 disabled:cursor-not-allowed",
@@ -134,7 +136,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
                     ) : null}
                 </div>
 
-                {error && (
+                {shouldShowErrorText && (
                     <p
                         id={errorId}
                         className={cn("text-xs text-red-500", errorClassName)}

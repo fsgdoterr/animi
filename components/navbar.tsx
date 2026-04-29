@@ -1,16 +1,21 @@
 'use client'
 
-import { publicRoutes } from "@/lib/frontend/utils/routes";
+import { adminRoutes, publicRoutes } from "@/lib/frontend/utils/routes";
 import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function Navbar() {
     const pathname = usePathname();
+
+    const routes = pathname.startsWith("/admin") ? adminRoutes : publicRoutes;
+
     return(
         <nav className="flex flex-col gap-2 w-full">
-            {publicRoutes.map(({icon: Icon, name, href}) => {
-                const isActive = href === pathname || (href !== '/' && pathname.startsWith(href));
+            {routes.map(({icon: Icon, name, href}) => {
+                const isActive = pathname.startsWith("/admin") ?
+                            (href === pathname || (href !== '/admin' && pathname.startsWith(href))) :
+                            (href === pathname || (href !== '/' && pathname.startsWith(href)));
                 return(
                     <Link 
                         href={href} 
